@@ -174,6 +174,7 @@ namespace Microsoft.EntityFrameworkCore.Query.ExpressionVisitors
                     new TableExpression(
                         tableName,
                         entityType.Relational().Schema,
+                        entityType.Relational().Catalog,
                         tableAlias,
                         _querySource));
             }

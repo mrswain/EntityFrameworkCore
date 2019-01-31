@@ -135,6 +135,26 @@ namespace Microsoft.EntityFrameworkCore.Metadata
                 Check.NullButNotEmpty(value, nameof(value)));
 
         /// <summary>
+        ///     The default catalog to use for the model, or <c>null</c> if none has been explicitly set.
+        /// </summary>
+        public virtual string DefaultCatalog
+        {
+            get => (string)Annotations.Metadata[RelationalAnnotationNames.DefaultCatalog];
+            [param: CanBeNull]
+            set => SetDefaultCatalog(value);
+        }
+
+        /// <summary>
+        ///     Attempts to set the <see cref="DefaultCatalog" /> using the semantics of the <see cref="RelationalAnnotations" /> in use.
+        /// </summary>
+        /// <param name="value"> The value to set. </param>
+        /// <returns> <c>True</c> if the annotation was set; <c>false</c> otherwise. </returns>
+        protected virtual bool SetDefaultCatalog([CanBeNull] string value)
+            => Annotations.SetAnnotation(
+                RelationalAnnotationNames.DefaultCatalog,
+                Check.NullButNotEmpty(value, nameof(value)));
+
+        /// <summary>
         ///     The maximum length allowed for store identifiers.
         /// </summary>
         public virtual int MaxIdentifierLength

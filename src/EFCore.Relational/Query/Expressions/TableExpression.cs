@@ -37,6 +37,25 @@ namespace Microsoft.EntityFrameworkCore.Query.Expressions
         }
 
         /// <summary>
+        ///     Initializes a new instance of the Microsoft.EntityFrameworkCore.Query.Expressions.TableExpression class.
+        /// </summary>
+        /// <param name="table"> The table name. </param>
+        /// <param name="schema"> The schema name. </param>
+        /// <param name="catalog"> The catalog name. </param>
+        /// <param name="alias"> The alias. </param>
+        /// <param name="querySource"> The query source. </param>
+        public TableExpression(
+            [NotNull] string table,
+            [CanBeNull] string schema,
+            [CanBeNull] string catalog,
+            [NotNull] string alias,
+            [NotNull] IQuerySource querySource)
+            : this(table, schema, alias, querySource)
+        {
+            Catalog = catalog;
+        }
+
+        /// <summary>
         ///     Gets the table name.
         /// </summary>
         /// <value>
@@ -51,6 +70,14 @@ namespace Microsoft.EntityFrameworkCore.Query.Expressions
         ///     The schema name.
         /// </value>
         public virtual string Schema { get; }
+
+        /// <summary>
+        ///     Gets the catalog name.
+        /// </summary>
+        /// <value>
+        ///     The catalog name.
+        /// </value>
+        public virtual string Catalog { get; }
 
         /// <summary>
         ///     Dispatches to the specific visit method for this node type.
@@ -84,6 +111,7 @@ namespace Microsoft.EntityFrameworkCore.Query.Expressions
         private bool Equals(TableExpression other)
             => string.Equals(Table, other.Table)
                && string.Equals(Schema, other.Schema)
+               && string.Equals(Catalog, other.Catalog)
                && string.Equals(Alias, other.Alias)
                && Equals(QuerySource, other.QuerySource);
 
@@ -101,6 +129,7 @@ namespace Microsoft.EntityFrameworkCore.Query.Expressions
                 hashCode = (hashCode * 397) ^ (QuerySource?.GetHashCode() ?? 0);
                 hashCode = (hashCode * 397) ^ Table.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Schema?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (Catalog?.GetHashCode() ?? 0);
 
                 return hashCode;
             }

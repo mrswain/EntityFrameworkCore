@@ -429,7 +429,8 @@ namespace Microsoft.EntityFrameworkCore.Query
                             && _columns.Count % 2 == 0
                             && _tables.Count == 2
                             && _tables[0].Table == _tables[1].Table
-                            && _tables[0].Schema == _tables[1].Schema)
+                            && _tables[0].Schema == _tables[1].Schema
+                            && _tables[0].Catalog == _tables[1].Catalog)
                         {
                             for (var j = 0; j < _columns.Count - 1; j += 2)
                             {

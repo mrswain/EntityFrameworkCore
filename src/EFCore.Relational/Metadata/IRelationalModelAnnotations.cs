@@ -45,5 +45,10 @@ namespace Microsoft.EntityFrameworkCore.Metadata
         ///     The default schema to use for the model, or <c>null</c> if none has been explicitly set.
         /// </summary>
         string DefaultSchema { get; }
+
+        /// <summary>
+        ///     The default catalog to use for the model, or <c>null</c> if none has been explicitly set.
+        /// </summary>
+        string DefaultCatalog { get; }
     }
 }

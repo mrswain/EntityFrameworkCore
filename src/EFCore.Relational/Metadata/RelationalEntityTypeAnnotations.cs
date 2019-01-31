@@ -126,6 +126,35 @@ namespace Microsoft.EntityFrameworkCore.Metadata
                 Check.NullButNotEmpty(value, nameof(value)));
 
         /// <summary>
+        ///     The database catalog that contains the mapped table.
+        /// </summary>
+        public virtual string Catalog
+        {
+            get => EntityType.BaseType != null
+                ? GetAnnotations(EntityType.RootType()).Catalog
+                : ((string)Annotations.Metadata[RelationalAnnotationNames.Catalog]
+                    ?? GetDefaultCatalog());
+
+            [param: CanBeNull]
+            set => SetCatalog(value);
+        }
+
+        private string GetDefaultCatalog()
+            => EntityType.HasDefiningNavigation()
+                ? GetAnnotations(EntityType.DefiningEntityType).Catalog
+                : GetAnnotations(EntityType.Model).DefaultCatalog;
+
+        /// <summary>
+        ///     Attempts to set the <see cref="Catalog" /> using the semantics of the <see cref="RelationalAnnotations" /> in use.
+        /// </summary>
+        /// <param name="value"> The value to set. </param>
+        /// <returns> <c>True</c> if the annotation was set; <c>false</c> otherwise. </returns>
+        protected virtual bool SetCatalog([CanBeNull] string value)
+            => Annotations.SetAnnotation(
+                RelationalAnnotationNames.Catalog,
+                Check.NullButNotEmpty(value, nameof(value)));
+
+        /// <summary>
         ///     The <see cref="IProperty" /> that will be used for storing a discriminator value.
         /// </summary>
         public virtual IProperty DiscriminatorProperty

@@ -91,6 +91,17 @@ namespace Microsoft.EntityFrameworkCore.Metadata.Internal
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        public virtual bool ToCatalog([CanBeNull] string name)
+        {
+            Check.NullButNotEmpty(name, nameof(name));
+
+            return SetCatalog(name);
+        }
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public virtual bool ToTable([CanBeNull] string name, [CanBeNull] string schema)
         {
             Check.NullButNotEmpty(name, nameof(name));
@@ -105,6 +116,39 @@ namespace Microsoft.EntityFrameworkCore.Metadata.Internal
             if (!SetSchema(schema))
             {
                 SetTableName(originalTable);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public virtual bool ToTable([CanBeNull] string name, [CanBeNull] string schema, [CanBeNull] string catalog)
+        {
+            Check.NullButNotEmpty(name, nameof(name));
+            Check.NullButNotEmpty(schema, nameof(schema));
+            Check.NullButNotEmpty(catalog, nameof(catalog));
+
+            var originalTable = TableName;
+            if (!SetTableName(name))
+            {
+                return false;
+            }
+
+            var originalSchema = Schema;
+            if (!SetSchema(schema))
+            {
+                SetTableName(originalTable);
+                return false;
+            }
+
+            if(!SetCatalog(catalog))
+            {
+                SetTableName(originalTable);
+                SetSchema(originalSchema);
                 return false;
             }
 

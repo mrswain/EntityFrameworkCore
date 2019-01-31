@@ -218,6 +218,11 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql
         protected virtual string SingleLineCommentToken { get; } = "--";
 
         /// <summary>
+        ///     The default identifier 
+        /// </summary>
+        protected virtual string IdentifierSeparator { get; } = ".";
+
+        /// <summary>
         ///     Visit a top-level SelectExpression.
         /// </summary>
         /// <param name="selectExpression"> The select expression. </param>
@@ -931,6 +936,11 @@ namespace Microsoft.EntityFrameworkCore.Query.Sql
         public virtual Expression VisitTable(TableExpression tableExpression)
         {
             Check.NotNull(tableExpression, nameof(tableExpression));
+
+            var catalog = tableExpression.Catalog;
+            if (!string.IsNullOrEmpty(catalog))
+                _relationalCommandBuilder
+                    .Append(SqlGenerator.DelimitIdentifier(catalog) + IdentifierSeparator);
 
             _relationalCommandBuilder
                 .Append(SqlGenerator.DelimitIdentifier(tableExpression.Table, tableExpression.Schema))

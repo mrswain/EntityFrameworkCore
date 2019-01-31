@@ -54,9 +54,19 @@ namespace Microsoft.EntityFrameworkCore.Metadata
         public const string Schema = Prefix + "Schema";
 
         /// <summary>
+        ///     The name for catalog name annotations.
+        /// </summary>
+        public const string Catalog = Prefix + "Catalog";
+
+        /// <summary>
         ///     The name for default schema annotations.
         /// </summary>
         public const string DefaultSchema = Prefix + "DefaultSchema";
+
+        /// <summary>
+        ///     The name for default catalog annotations.
+        /// </summary>
+        public const string DefaultCatalog = Prefix + "DefaultCatalog";
 
         /// <summary>
         ///     The name for constraint name annotations.

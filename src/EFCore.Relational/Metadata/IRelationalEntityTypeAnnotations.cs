@@ -20,6 +20,11 @@ namespace Microsoft.EntityFrameworkCore.Metadata
         string Schema { get; }
 
         /// <summary>
+        ///     The database catalog that contains the schema or table.
+        /// </summary>
+        string Catalog { get; }
+
+        /// <summary>
         ///     The <see cref="IProperty" /> that will be used for storing a discriminator value.
         /// </summary>
         IProperty DiscriminatorProperty { get; }
