@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
@@ -15,6 +16,7 @@ namespace Microsoft.EntityFrameworkCore.Query.ExpressionTranslators
     /// </summary>
     public class RelationalCompositeExpressionFragmentTranslator : IExpressionFragmentTranslator
     {
+        private readonly List<IExpressionFragmentTranslator> _plugins = new List<IExpressionFragmentTranslator>();
         private readonly List<IExpressionFragmentTranslator> _translators
             = new List<IExpressionFragmentTranslator>
             {
@@ -30,6 +32,8 @@ namespace Microsoft.EntityFrameworkCore.Query.ExpressionTranslators
             [NotNull] RelationalCompositeExpressionFragmentTranslatorDependencies dependencies)
         {
             Check.NotNull(dependencies, nameof(dependencies));
+
+            _plugins.AddRange(dependencies.Plugins.SelectMany(p => p.Translators));
         }
 
         /// <summary>
@@ -42,7 +46,7 @@ namespace Microsoft.EntityFrameworkCore.Query.ExpressionTranslators
         public virtual Expression Translate(Expression expression)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var translator in _translators)
+            foreach (var translator in _plugins.Concat(_translators))
             {
                 var result = translator.Translate(expression);
                 if (result != null)
